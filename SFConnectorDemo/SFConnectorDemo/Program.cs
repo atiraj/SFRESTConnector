@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SFRESTConnector;
+using SFNetRestLib;
 
 namespace SFConnectorDemo
 {
@@ -11,9 +11,11 @@ namespace SFConnectorDemo
     {
         static void Main(string[] args)
         {
+            string jobId=string.Empty;
             try
             {
                 SFRESTConnection.Connect();
+                SFRestBulkOperation.CreateJob(SFRESTConnection.OauthToken, "query", "Contact", ref jobId);
             }
             catch (Exception ex)
             {

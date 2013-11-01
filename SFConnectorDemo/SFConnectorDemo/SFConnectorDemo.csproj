@@ -48,10 +48,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SFRESTConnector\SFRESTConnector.csproj">
+    <ProjectReference Include="..\..\SFRESTConnector\SFNetRestLib.csproj">
       <Project>{8069b80b-4792-4015-a6e3-daa3119aac2f}</Project>
-      <Name>SFRESTConnector</Name>
+      <Name>SFNetRestLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\Schema\Contact_Job.xml" />
+    <Content Include="bin\Debug\Schema\jobs.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

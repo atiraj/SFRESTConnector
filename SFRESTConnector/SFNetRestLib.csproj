@@ -7,7 +7,7 @@
     <ProjectGuid>{8069B80B-4792-4015-A6E3-DAA3119AAC2F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFRESTConnector</RootNamespace>
+    <RootNamespace>SFNetRestLib</RootNamespace>
     <AssemblyName>SFRESTConnector</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SFJob.cs" />
+    <Compile Include="SFJobs.cs" />
     <Compile Include="SFRestBulkOperation.cs" />
     <Compile Include="SFRESTConnection.cs" />
   </ItemGroup>

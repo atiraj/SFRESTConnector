@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft;
 using Newtonsoft.Json.Linq;
 
-namespace SFRESTConnector
+namespace SFNetRestLib
 {
     public class RESTAppSettingsNotFoundException : Exception
     {
@@ -35,38 +35,17 @@ namespace SFRESTConnector
 
         private static bool isConnected
         {
-            get
-            {
-                return isConnected;
-            }
-            set
-            {
-                isConnected = value;
-            }
+            get;set;
         }
 
         private static string oauthToken
         {
-            get
-            {
-                return oauthToken;
-            }
-            set
-            {
-                oauthToken = value;
-            }
+            get;set;
         }
 
         private static string serviceURL
         {
-            get
-            {
-                return serviceURL;
-            }
-            set
-            {
-                serviceURL = value;
-            }
+            get;set;
         }
 
         public static string OauthToken
@@ -110,7 +89,7 @@ namespace SFRESTConnector
                     sfdcConsumerKey = ConfigurationManager.AppSettings.Get("sfdcCKey");
                     sfdcConsumerSecret = ConfigurationManager.AppSettings.Get("sfdcCSecret");
 
-                    if (OauthToken != null && OauthToken != string.Empty)
+                    if (oauthToken == null || oauthToken == string.Empty)
                     {
                         MakeConnection();
                     }

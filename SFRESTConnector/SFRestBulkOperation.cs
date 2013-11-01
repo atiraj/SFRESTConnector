@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Net;
+using System.Configuration;
 
-namespace SFRESTConnector
+namespace SFNetRestLib
 {
-    public class SFRestBulkOperation
+    public static class SFRestBulkOperation
     {
 
         /// <summary>
@@ -20,35 +21,65 @@ namespace SFRESTConnector
         /// <param name="sfObjectName"></param>
         /// <param name="jobId"></param>
         /// <remarks></remarks>
+        private static string schemaDir
+        {
+            get;
+            set;
+        }
 
         public static void CreateJob(string sfSessionId, string sfOperation, string sfObjectName, ref string jobId)
         {
-                string str = "";
+                string str = string.Empty;
+                string schemaFile = string.Empty;
                 string reqURL = "";
                 byte[] bytes = null;
                 XmlDocument reqDoc = null;
                 XmlDocument responseXmlDocument = new XmlDocument();
-    
-                str = "" + "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<jobInfo xmlns=\"http://www.force.com/2009/06/asyncapi/dataload\">" + "    <operation></operation>" + "    <object></object>" + "    <contentType>CSV</contentType>" + "</jobInfo>";
-                //Eg for XML content type
-                //"    <contentType>XML</contentType>" &
-    
-                reqURL = "https://na1.salesforce.com/services/async/28.0/job";
-                reqDoc = new XmlDocument();
-                reqDoc.LoadXml(str);
-                // added XML modifications
-                reqDoc.GetElementsByTagName("operation")[0].InnerText = sfOperation;
-                reqDoc.GetElementsByTagName("object")[0].InnerText = sfObjectName;
-                bytes = System.Text.Encoding.ASCII.GetBytes(reqDoc.InnerXml);
-                //bytes = System.Text.Encoding.UTF8.GetBytes(reqDoc.InnerXml)
-               
-                using (Stream responseStream = Post(bytes, reqURL, sfSessionId, "POST", "text/csv; charset=UTF-8"))
+                Stream responseStream = null;
+                try
                 {
-                    responseXmlDocument.Load(responseStream);
-                    //Get jobId
-                    jobId = ((((responseXmlDocument) != null)) ? responseXmlDocument.GetElementsByTagName("id").Item(0).InnerText : "");
+                    if(schemaDir==string.Empty || schemaDir==null)
+                    {
+                        schemaDir = ConfigurationManager.AppSettings.Get("schemaDir");
+                        if (schemaDir == string.Empty || schemaDir == null)
+                        {
+                            throw new Exception("Please provide valid value for schemaDir in app settings.");
+                        }
+                        schemaFile=AppDomain.CurrentDomain.BaseDirectory +schemaDir + "\\" + sfObjectName + "_Job.xml";
+                    }
                 }
-    
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                try
+                {
+                    //str = "" + "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<jobInfo xmlns=\"http://www.force.com/2009/06/asyncapi/dataload\">" + "    <operation></operation>" + "    <object></object>" + "    <contentType>CSV</contentType>" + "</jobInfo>";
+                    //Eg for XML content type
+                    //"    <contentType>XML</contentType>" &
+                    reqURL = "https://na15-api.salesforce.com/services/async/28.0/job";
+                    reqDoc = new XmlDocument();
+                    //reqDoc.LoadXml(str);
+                    // added XML modifications
+                    reqDoc.Load(schemaFile);
+                    reqDoc.GetElementsByTagName("operation")[0].InnerText = sfOperation;
+                    reqDoc.GetElementsByTagName("object")[0].InnerText = sfObjectName;
+                    bytes = System.Text.Encoding.ASCII.GetBytes(reqDoc.InnerXml);
+                    //bytes = System.Text.Encoding.UTF8.GetBytes(reqDoc.InnerXml)
+
+                    using (responseStream = Post(bytes, reqURL, sfSessionId, "POST", "text/csv; charset=UTF-8"))
+                    {
+                        responseXmlDocument.Load(responseStream);
+                        //Get jobId
+                        jobId = ((((responseXmlDocument) != null)) ? responseXmlDocument.GetElementsByTagName("id").Item(0).InnerText : "");
+                    }
+
+                }
+
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
         }
 
         /// <summary>
