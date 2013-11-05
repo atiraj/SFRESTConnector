@@ -12,10 +12,13 @@ namespace SFConnectorDemo
         static void Main(string[] args)
         {
             string jobId=string.Empty;
+            string sfBatchId = string.Empty;
+            string sfResultId = string.Empty;
             try
             {
                 SFRESTConnection.Connect();
                 SFRestBulkOperation.CreateJob(SFRESTConnection.OauthToken, "query", "Contact", ref jobId);
+                SFRestBulkOperation.AddQueryBatch(SFRESTConnection.OauthToken, jobId, "Contact", sfBatchId, sfResultId);
             }
             catch (Exception ex)
             {
