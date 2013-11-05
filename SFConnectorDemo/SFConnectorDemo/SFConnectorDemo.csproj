@@ -54,6 +54,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Debug\Schema\Contact_Batch.xml" />
     <Content Include="bin\Debug\Schema\Contact_Job.xml" />
     <Content Include="bin\Debug\Schema\jobs.xml" />
   </ItemGroup>
